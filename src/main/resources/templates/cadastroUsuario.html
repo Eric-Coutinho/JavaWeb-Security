@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Usuário - Gerenciamento de Filmes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .signup-container { /* Alterado de login-container para signup-container */
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .signup-container h1 {
+            color: #1877f2; /* Mantendo o azul para consistência */
+            margin-bottom: 24px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .signup-form input[type="text"],
+        .signup-form input[type="email"], /* Adicionado tipo email */
+        .signup-form input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .signup-form input[type="text"]:focus,
+        .signup-form input[type="email"]:focus,
+        .signup-form input[type="password"]:focus {
+            border-color: #1877f2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+        .signup-form button[type="submit"] {
+            background-color: #42b72a; /* Verde para cadastro, diferenciando do login */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .signup-form button[type="submit"]:hover {
+            background-color: #36a420;
+        }
+
+        .login-link { /* Link para voltar ao login */
+            display: block;
+            margin-top: 20px;
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo para mensagens de erro/sucesso, se você adicionar no futuro */
+        .message {
+            color: #fa383e; /* Default to error, can be changed */
+            background-color: #ffe0e0;
+            border: 1px solid #fa383e;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .message.success {
+             color: #3c763d;
+             background-color: #dff0d8;
+             border-color: #d6e9c6;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Crie sua Conta</h1>
+        <form method="post" th:action="@{/cadastroUsuario}" class="signup-form">
+            <div>
+                <input type="text" name="nome" placeholder="Nome Completo" required />
+            </div>
+            <div>
+                <input type="email" name="email" placeholder="Email" required /> </div>
+            <div>
+                <input type="password" name="senha" placeholder="Senha" required />
+            </div>
+            <div>
+                <button type="submit">Cadastrar</button>
+            </div>
+        </form>
+        <a th:href="@{/login}" class="login-link">Já tem uma conta? Faça login</a>
+    </div>
+</body>
+</html>

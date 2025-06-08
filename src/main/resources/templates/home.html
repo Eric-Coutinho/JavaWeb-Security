@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li .details {
+            flex-grow: 1;
+        }
+        li .actions form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .movie-info {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .welcome-user {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .button, button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover, button:hover {
+            background-color: #4cae4c;
+        }
+        .button-danger {
+            background-color: #d9534f;
+        }
+        .button-danger:hover {
+            background-color: #c9302c;
+        }
+        .button-primary {
+            background-color: #337ab7;
+        }
+        .button-primary:hover {
+            background-color: #286090;
+        }
+        .nav-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .nav-links a {
+            margin-right: 15px;
+        }
+        .logout-form {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .empty-list {
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div th:if="${session.usuario != null}" class="welcome-user">
+            Olá, <span th:text="${session.usuario.nome}">Usuário</span>!
+        </div>
+
+        <h2>Filmes Para Assistir</h2>
+        <div th:if="${usuario != null and not #lists.isEmpty(usuario.filmesParaAssistir)}">
+            <ul>
+                <li th:each="filme : ${usuario.filmesParaAssistir}">
+                    <div class="details">
+                        <strong th:text="${filme.nome}">Nome do Filme</strong><br/>
+                        <span class="movie-info">Gênero: <span th:text="${filme.genero}">Gênero</span></span><br/>
+                        <span class="movie-info">Ano: <span th:text="${filme.ano}">Ano</span></span>
+                    </div>
+                    <div class="actions">
+                        <form method="post" th:action="@{/assistir}">
+                            <input type="hidden" name="nome" th:value="${filme.nome}" />
+                            <button type="submit" class="button-primary">Marcar como Assistido</button>
+                        </form>
+                        <form method="post" th:action="@{/remover}">
+                            <input type="hidden" name="nome" th:value="${filme.nome}" />
+                            <button type="submit" class="button-danger">Remover</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div th:if="${usuario == null or #lists.isEmpty(usuario.filmesParaAssistir)}">
+            <p class="empty-list">Nenhum filme na sua lista para assistir.</p>
+        </div>
+
+        <h2>Filmes Assistidos</h2>
+        <div th:if="${usuario != null and not #lists.isEmpty(usuario.filmesAssistidos)}">
+            <ul>
+                <li th:each="filmeAssistido : ${usuario.filmesAssistidos}">
+                    <div class="details">
+                        <strong th:text="${filmeAssistido.nome}">Nome do Filme</strong><br/>
+                        <span class="movie-info">Gênero: <span th:text="${filmeAssistido.genero}">Gênero</span></span><br/>
+                        <span class="movie-info">Ano: <span th:text="${filmeAssistido.ano}">Ano</span></span><br/>
+                        <span class="movie-info">Assistido em: <span th:text="${#temporals.format(filmeAssistido.dataAssistido, 'dd/MM/yyyy')}">Data</span></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div th:if="${usuario == null or #lists.isEmpty(usuario.filmesAssistidos)}">
+            <p class="empty-list">Nenhum filme assistido ainda.</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="/cadastroFilme" class="button">Adicionar Novo Filme</a>
+        </div>
+
+        <div class="logout-form">
+            <form method="post" th:action="@{/logout}">
+                <button type="submit" class="button">Logout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
