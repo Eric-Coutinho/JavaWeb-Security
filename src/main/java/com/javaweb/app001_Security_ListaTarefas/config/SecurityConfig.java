@@ -19,11 +19,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**").permitAll()
-                        .anyRequest().authenticated())
+                .requestMatchers("/css/**", "/js/**").permitAll()
+                .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/", true)
-                        .permitAll())
+                .defaultSuccessUrl("/", true)
+                .permitAll())
                 .logout(logout -> logout.permitAll());
 
         return http.build();
@@ -38,12 +38,12 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
 
         System.out.println("Senha criptografada de 'adm': " + encoder.encode("adm"));
-        
+
         UserDetails user = User.builder()
-            .username("adm")
-            .password(encoder.encode("adm"))
-            .roles("USER")
-            .build();
+                .username("adm")
+                .password(encoder.encode("adm"))
+                .roles("USER")
+                .build();
 
         return new InMemoryUserDetailsManager(user);
     }
