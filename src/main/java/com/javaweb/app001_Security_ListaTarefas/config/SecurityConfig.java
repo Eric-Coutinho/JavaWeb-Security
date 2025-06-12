@@ -19,12 +19,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated())
+                        .requestMatchers("/h2-console/**", "/css/**", "/js/**").permitAll()
+                        .anyRequest().authenticated())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()))
                 .formLogin(form -> form
-                .defaultSuccessUrl("/", true)
-                .permitAll())
-                .logout(logout -> logout.permitAll());
+                        .defaultSuccessUrl("/", true)
+                        .permitAll())
+                .logout(logout -> logout.permitAll())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         return http.build();
     }

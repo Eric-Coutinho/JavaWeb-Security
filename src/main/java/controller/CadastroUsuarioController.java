@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import model.Usuario;
 import service.UsuarioService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +17,8 @@ public class CadastroUsuarioController {
 
     @PostMapping("/cadastroUsuario")
     public String cadastroUsuario(@RequestParam String nome, @RequestParam String email, @RequestParam String senha) {
-        Usuario usuario = new Usuario(nome, email, senha);
-        boolean sucesso = UsuarioService.cadastrarUsuario(usuario);
+        UsuarioService usuarioService = new UsuarioService();
+        boolean sucesso = usuarioService.addUser(nome, email, senha);
         return sucesso ? "redirect:/login" : "cadastroUsuario";
     }    
 }

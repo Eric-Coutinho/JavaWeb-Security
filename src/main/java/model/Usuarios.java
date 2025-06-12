@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -19,10 +20,16 @@ public class Usuarios {
     private String email;
     private String senha;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    private List<Tarefas> tarefas = new ArrayList<>();
+    @OneToMany(mappedBy = "usuario", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    private List<Tarefas> listaTarefas = new ArrayList<Tarefas>();
 
     public Usuarios() {
+    }
+
+    public Usuarios(String nome, String email, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
     }
 
     public Usuarios(Long id, String nome, String email, String senha) {

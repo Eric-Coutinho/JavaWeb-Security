@@ -1,33 +1,41 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import model.Usuario;
+import jakarta.annotation.PostConstruct;
+import model.Usuarios;
+import repository.UsuarioRepository;
 
 public class UsuarioService {
-    private static List<Usuario> usuarios = new ArrayList<>();
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    static {
-        usuarios.add(new Usuario("adm", "adm", "adm"));
+    public boolean addUser(String nome, String email, String senha) {
+        try {
+            Usuarios usr = new Usuarios(nome, email, senha);
+            usuarioRepository.save(usr);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public static Usuario autenticar(String email, String senha) {
-        for (Usuario u : usuarios) {
-            if (u.getEmail().equals(email) && u.getSenha().equals(senha)) {
-                return u;
-            }
-        }
+    public Usuarios verificaUser(String email, String senha) {
+        Usuarios usr = usuarioRepository.findByEmailAndSenha(email, senha);
+        if (usr != null)
+            return usr;
         return null;
     }
 
-    public static boolean cadastrarUsuario(Usuario usuario) {
-        for (Usuario u : usuarios) {
-            if (u.getEmail().equals(usuario.getEmail())) {
-                return false;
-            }
-        }
-        usuarios.add(usuario);
-        return true;
+    public int quantidadeUserCadastrado() {
+        int quant = (int) usuarioRepository.count();
+        return quant;
+    }
+
+    @PostConstruct
+    public void init() {
+        Usuarios adm = new Usuarios("adm", "adm", "adm");
+        usuarioRepository.save(adm);
     }
 }
